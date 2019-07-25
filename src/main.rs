@@ -116,7 +116,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn test() {
-        panic!()
+    fn test_stub() {
+        assert_eq!("hello", "world");
     }
 }
