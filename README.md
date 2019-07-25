@@ -1,4 +1,4 @@
-# Watson #
+# Watson &emsp; [![Build Status](https://travis-ci.org/tetigi/watson.svg?branch=master)](https://travis-ci.org/tetigi/watson) #
 
 Simple CLI tool to tell you what you have on for the rest of the day (by leveraging Google calendar and Reminders).
 
