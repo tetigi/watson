@@ -19,3 +19,4 @@ yup-oauth2 = "^1.0"
 
 structopt = "0.2.18"
 time = "0.1.40" # <- required for chrono duration manipulation
+uuid = { version = "0.7.4", features = ["v4"] }

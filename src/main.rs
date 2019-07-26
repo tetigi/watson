@@ -6,11 +6,12 @@
 /// > 1100 - Leave for lunch
 /// > 1800 - Interviews
 use chrono::prelude::*;
-use hyper::client::response::Response;
 use std::env;
 use structopt::StructOpt;
 use time::Duration;
 use yup_oauth2::ServiceAccountAccess;
+
+mod auth;
 
 const GAPP_CREDS_LOC: &str = "GOOGLE_APPLICATION_CREDENTIALS";
 
@@ -109,6 +110,8 @@ fn main() {
     let opt = Opt::from_args();
     let cal_provider = GoogleCalendar::new();
     print_events(fetch(cal_provider));
+
+    println!("{}", auth::create_code_verifier());
 }
 
 #[cfg(test)]
