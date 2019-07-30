@@ -1,3 +1,5 @@
+#![feature(proc_macro_hygiene, decl_macro)]
+
 /// Fetches what you have on for today via Google calendar and reminders
 /// Start with calendar entries
 /// Then hack in a reminders integration too
@@ -15,41 +17,41 @@ mod auth;
 
 const GAPP_CREDS_LOC: &str = "GOOGLE_APPLICATION_CREDENTIALS";
 
-type CalendarHub =
-    google_calendar3::CalendarHub<hyper::Client, yup_oauth2::ServiceAccountAccess<hyper::Client>>;
+//type CalendarHub =
+//    google_calendar3::CalendarHub<hyper::Client, yup_oauth2::ServiceAccountAccess<hyper::Client>>;
 
 struct GoogleCalendar {
-    hub: CalendarHub,
+    //hub: CalendarHub,
 }
 
 // TODO Add an Into -> Event for a GEvent
 impl GoogleCalendar {
     pub fn new() -> GoogleCalendar {
-        let hub = GoogleCalendar::init();
-        GoogleCalendar { hub }
+        //let hub = GoogleCalendar::init();
+        GoogleCalendar {}
     }
 
-    fn init() -> CalendarHub {
-        let key_loc = match env::var(GAPP_CREDS_LOC) {
-            Ok(val) => val,
-            Err(e) => panic!("Error getting env var {}: {}", GAPP_CREDS_LOC, e),
-        };
+    //fn init() -> CalendarHub {
+    //    let key_loc = match env::var(GAPP_CREDS_LOC) {
+    //        Ok(val) => val,
+    //        Err(e) => panic!("Error getting env var {}: {}", GAPP_CREDS_LOC, e),
+    //    };
 
-        let secret = yup_oauth2::service_account_key_from_file(&key_loc).unwrap();
+    //    let secret = yup_oauth2::service_account_key_from_file(&key_loc).unwrap();
 
-        let client = hyper::Client::with_connector(hyper::net::HttpsConnector::new(
-            hyper_rustls::TlsClient::new(),
-        ));
+    //    let client = hyper::Client::with_connector(hyper::net::HttpsConnector::new(
+    //        hyper_rustls::TlsClient::new(),
+    //    ));
 
-        let auth = ServiceAccountAccess::new(secret, client);
+    //    let auth = ServiceAccountAccess::new(secret, client);
 
-        CalendarHub::new(
-            hyper::Client::with_connector(hyper::net::HttpsConnector::new(
-                hyper_rustls::TlsClient::new(),
-            )),
-            auth,
-        )
-    }
+    //    CalendarHub::new(
+    //        hyper::Client::with_connector(hyper::net::HttpsConnector::new(
+    //            hyper_rustls::TlsClient::new(),
+    //        )),
+    //        auth,
+    //    )
+    //}
 }
 
 impl EventProvider for GoogleCalendar {
