@@ -1,9 +1,11 @@
-#[macro_use] extern crate rocket;
+#![feature(proc_macro_hygiene, decl_macro)]
 
 use curl::easy::Easy;
 use std::collections::HashMap;
 use url::Url;
 use uuid::Uuid;
+use rocket::State;
+use crossbeam::channel as xbc;
 
 const OAUTH_URL: &str = "https://accounts.google.com/o/oauth2/v2/auth";
 const CLIENT_ID: &str = "395397085121-j1fvnakm3870a1s1bocuslp47feql2li.apps.googleusercontent.com";
@@ -11,8 +13,10 @@ const PORT: u32 = 7878;
 const STATE_STUB: &str = "stub";
 
 #[get("/")]
-fn index() -> &'static str {
-    panic!("OH SHIT")
+fn index(tx: State<xbc::Sender<String>>) -> &'static str {
+    tx.send("Hello :)".to_string()).unwrap();
+
+    "Hello, world!"
 }
 
 pub fn create_code_verifier() -> String {
@@ -48,12 +52,31 @@ fn oauth2_request_params() -> HashMap<String, String> {
     params
 }
 
-fn oauth2_workflow() {
+struct Token {}
+
+/// Performs the standard oauth2 workflow, returning None if something went wrong
+fn oauth2_workflow() -> Option<Token> {
     let params = oauth2_request_params();
 
     let link = Url::parse_with_params(OAUTH_URL, params);
 
-    println!("{:?}", link);
+    println!("Please visit the below link to authorise Watson to look at your calendar!\n");
+    println!("{:?}\n", link);
+
+    let (tx, rx): (xbc::Sender<String>, xbc::Receiver<String>) = xbc::unbounded();
+
+    std::thread::spawn(move || {
+    rocket::ignite()
+        .mount("/", routes![index])
+        .manage(tx)
+        .launch();
+    });
+
+    if let Ok(msg) = rx.recv() {
+        println!("It worked! Got {}", msg);
+    }
+
+    unimplemented!()
 }
 
 mod test {
@@ -61,7 +84,7 @@ mod test {
 
     #[test]
     fn test_oauth_params() {
-	println!("{:?}", rocket::ignite().mount("/", routes![index]).launch());
+	let _ = oauth2_workflow();
         panic!();
     }
 }

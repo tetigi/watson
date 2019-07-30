@@ -7,11 +7,16 @@
 /// > 0900 - Do homework
 /// > 1100 - Leave for lunch
 /// > 1800 - Interviews
+
 use chrono::prelude::*;
 use std::env;
 use structopt::StructOpt;
 use time::Duration;
 use yup_oauth2::ServiceAccountAccess;
+
+#[macro_use]
+extern crate rocket;
+
 
 mod auth;
 

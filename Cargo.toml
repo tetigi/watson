@@ -17,6 +17,7 @@ serde = "^1.0"
 serde_json = "^1.0"
 yup-oauth2 = "^1.0"
 
+crossbeam = "0.7.2"
 curl = "0.4.22"
 rocket = "0.4.2"
 structopt = "0.2.18"
